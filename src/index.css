@@ -375,8 +375,9 @@ h1, h2, h3, h4 {
 
 .team-pill {
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   padding: 8px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -389,7 +390,8 @@ h1, h2, h3, h4 {
 }
 
 .team-pill:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .team-pill.active {

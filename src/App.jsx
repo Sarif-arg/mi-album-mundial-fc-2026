@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import StickerCard from './components/StickerCard';
 import QuickAdd from './components/QuickAdd';
 import SharePanel from './components/SharePanel';
+import TradeMatcher from './components/TradeMatcher';
 import './App.css'; // Just in case, although styling is mainly in index.css
 
 export default function App() {
@@ -421,14 +422,13 @@ export default function App() {
             onBulkAdd={handleBulkAdd} 
             showToast={showToast} 
           />
-          <div className="glass-card">
-            <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>Instrucciones</h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              Puedes escanear o escribir los códigos a mano para cargarlos al instante. Por ejemplo, al volver de cambiar figuritas, puedes copiar la lista que te pasaron por texto y pegarla directamente aquí.
-              <br/><br/>
-              Los códigos repetidos incrementarán el contador de repetidas automáticamente.
-            </p>
-          </div>
+          
+          <TradeMatcher
+            stickersList={stickersList}
+            stickerCounts={stickerCounts}
+            onBulkAdd={handleBulkAdd}
+            showToast={showToast}
+          />
         </>
       )}
 
@@ -519,8 +519,8 @@ export default function App() {
           className={`nav-item ${activeTab === 'quickadd' ? 'active' : ''}`}
           onClick={() => setActiveTab('quickadd')}
         >
-          <span className="nav-icon">📥</span>
-          <span className="nav-label">Carga</span>
+          <span className="nav-icon">🔄</span>
+          <span className="nav-label">Canjes</span>
         </button>
 
         <button 
