@@ -49,22 +49,22 @@ export default function QuickAdd({ stickersList, onBulkAdd, showToast }) {
   return (
     <div className="glass-card">
       <h3 className="quick-add-title">
-        <span>📥</span> Carga Rápida en Lote
+        <span>⚡</span> Agregar muchas figuritas juntas
       </h3>
       <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
-        Escribe o pega múltiples códigos separados por espacios, comas o saltos de línea (ej: <code>ARG-10, FWC02, USA01, ARG10</code>).
+        Si abriste varios paquetes, escribe aquí sus códigos separados por comas o espacios (ej: <code>ARG-10, FWC-00, USA-12</code>).
       </p>
       
       <form onSubmit={handleSubmit} className="quick-add-input-wrapper">
         <input
           type="text"
           className="quick-add-input"
-          placeholder="Ej: FWC-01, ARG-10, USA12..."
+          placeholder="Escribe los códigos acá..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
         <button type="submit" className="btn btn-success">
-          Cargar
+          ¡Cargar figuritas! 🚀
         </button>
       </form>
 
@@ -72,12 +72,12 @@ export default function QuickAdd({ stickersList, onBulkAdd, showToast }) {
         <div style={{ marginTop: '12px', fontSize: '0.8rem', padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
           {report.successCount > 0 && (
             <div style={{ color: 'var(--primary)', fontWeight: 600 }}>
-              ✔ {report.successCount} figuritas cargadas con éxito.
+              ✔ ¡Se agregaron {report.successCount} figuritas a tu álbum!
             </div>
           )}
           {report.invalid.length > 0 && (
             <div style={{ color: 'var(--accent-pink)', marginTop: '4px' }}>
-              ⚠ Códigos no reconocidos: {report.invalid.join(', ')}
+              ⚠ No entendí estos códigos: {report.invalid.join(', ')}
             </div>
           )}
         </div>

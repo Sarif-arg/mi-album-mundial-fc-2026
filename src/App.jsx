@@ -277,12 +277,6 @@ export default function App() {
             totalDuplicates={stats.totalDuplicates} 
             missingCount={stats.missingCount} 
           />
-          
-          <QuickAdd 
-            stickersList={stickersList} 
-            onBulkAdd={handleBulkAdd} 
-            showToast={showToast} 
-          />
 
           <SharePanel 
             stickersList={stickersList} 
