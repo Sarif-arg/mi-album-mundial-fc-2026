@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="2.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.50835204"
+     inkscape:cx="-0.98357036"
+     inkscape:cy="56.063511"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1">
+      <path
+         d="M -141.3898,235.97779 H 87.136206 V -59.761206 H -141.3898 Z"
+         id="path1"
+         style="stroke-width:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2">
+      <path
+         d="M -113.5534,229.5901 H 114.97261 V -66.148896 H -113.5534 Z"
+         id="path2"
+         style="stroke-width:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3">
+      <path
+         d="M -100.589,229.5901 H 127.93701 V -66.148896 H -100.589 Z"
+         id="path3"
+         style="stroke-width:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4">
+      <path
+         d="M -79.2931,229.5901 H 149.23291 V -66.148896 H -79.2931 Z"
+         id="path4"
+         style="stroke-width:1" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       d="M 116.33468,0 H 56.198772 C 39.591406,0 26.130112,13.461999 26.130112,30.067954 h 30.06866 c -16.607366,0 -30.06866,13.461294 -30.06866,30.067954 V 90.204569 H 146.40263 V 60.135908 h -30.06795 c 16.60666,0 30.06795,-13.461999 30.06795,-30.067954 C 146.40263,13.461999 132.94134,0 116.33468,0"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.706;stroke-dasharray:none"
+       id="path626"
+       inkscape:label="2026"
+       sodipodi:nodetypes="csccsccccsc" />
+    <g
+       id="g652"
+       transform="matrix(0.70555553,0,0,-0.70555553,-20.482348,197.11048)">
+      <g
+         id="g654"
+         transform="matrix(69.543872,0,0,170.87421,81.623817,80.263971)"
+         inkscape:label="g654" />
+    </g>
+  </g>
+</svg>

@@ -535,7 +535,8 @@ export default function App() {
           className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('dashboard')}
         >
-          <span className="nav-icon">📊</span>
+          <Digit2Svg />
+          <ProgressIcon />
           <span className="nav-label">Progreso</span>
         </button>
 
@@ -543,7 +544,8 @@ export default function App() {
           className={`nav-item ${activeTab === 'album' ? 'active' : ''}`}
           onClick={() => setActiveTab('album')}
         >
-          <span className="nav-icon">📖</span>
+          <Digit0Svg />
+          <AlbumIcon />
           <span className="nav-label">Álbum</span>
         </button>
 
@@ -551,7 +553,8 @@ export default function App() {
           className={`nav-item ${activeTab === 'quickadd' ? 'active' : ''}`}
           onClick={() => setActiveTab('quickadd')}
         >
-          <span className="nav-icon">🔄</span>
+          <Digit2Svg />
+          <CanjesIcon />
           <span className="nav-label">Canjes</span>
         </button>
 
@@ -559,10 +562,64 @@ export default function App() {
           className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
           onClick={() => setActiveTab('settings')}
         >
-          <span className="nav-icon">⚙</span>
+          <Digit6Svg />
+          <SettingsIcon />
           <span className="nav-label">Ajustes</span>
         </button>
       </nav>
     </div>
   );
 }
+
+// Background Digit SVGs to form "2026"
+const Digit2Svg = () => (
+  <svg viewBox="26.130112 0 120.272518 90.204569" className="nav-digit">
+    <path d="M 116.33468,0 H 56.198772 C 39.591406,0 26.130112,13.461999 26.130112,30.067954 h 30.06866 c -16.607366,0 -30.06866,13.461294 -30.06866,30.067954 V 90.204569 H 146.40263 V 60.135908 h -30.06795 c 16.60666,0 30.06795,-13.461999 30.06795,-30.067954 C 146.40263,13.461999 132.94134,0 116.33468,0" />
+  </svg>
+);
+
+const Digit0Svg = () => (
+  <svg viewBox="0 0 120.27252 90.204567" className="nav-digit">
+    <path d="M 90.204568,0 H 30.06866 C 13.461294,0 0,13.461995 0,30.067955 v 30.06795 c 0,16.60666 13.461294,30.06866 30.06866,30.06866 h 60.135908 c 16.606662,0 30.067952,-13.462 30.067952,-30.06866 0,-16.60596 0,-30.06795 0,-30.06795 C 120.27252,13.461995 106.81123,0 90.204568,0" />
+  </svg>
+);
+
+const Digit6Svg = () => (
+  <svg viewBox="0 0 120.27251 90.204567" className="nav-digit">
+    <g transform="translate(-26.130112,-95.356535)">
+      <path d="M 116.33468,95.356535 H 56.198772 c -16.607366,0 -30.06866,13.461995 -30.06866,30.067955 v 30.06795 c 0,16.60666 13.461294,30.06866 30.06866,30.06866 h 60.135908 c 16.60666,0 30.06795,-13.462 30.06795,-30.06866 0,-16.60596 -13.46129,-30.06795 -30.06795,-30.06795 h 30.06795 c 0,-16.60596 -13.46129,-30.067955 -30.06795,-30.067955" />
+    </g>
+  </svg>
+);
+
+// Premium SVG Icons
+const ProgressIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="nav-icon">
+    <line x1="18" y1="20" x2="18" y2="10" />
+    <line x1="12" y1="20" x2="12" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="14" />
+  </svg>
+);
+
+const AlbumIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="nav-icon">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+  </svg>
+);
+
+const CanjesIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="nav-icon">
+    <polyline points="17 1 21 5 17 9" />
+    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+    <polyline points="7 23 3 19 7 15" />
+    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+  </svg>
+);
+
+const SettingsIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="nav-icon">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  </svg>
+);
