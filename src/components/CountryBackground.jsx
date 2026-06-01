@@ -64,7 +64,7 @@ export default function CountryBackground({ teamId }) {
         width: '100vw',
         height: '100vh',
         zIndex: -2,
-        opacity: 0.14,
+        opacity: 0.65,
         pointerEvents: 'none',
         overflow: 'hidden',
         display: 'flex',
@@ -75,10 +75,11 @@ export default function CountryBackground({ teamId }) {
     >
       <svg
         style={{
-          width: '100%',
-          height: '100%',
+          width: '120%',
+          height: '120%',
           objectFit: 'cover',
-          shapeRendering: 'geometricPrecision'
+          shapeRendering: 'geometricPrecision',
+          filter: 'saturate(1.45) contrast(1.12)'
         }}
         viewBox="0 0 5296.4151 6676.5295"
         version="1.0"

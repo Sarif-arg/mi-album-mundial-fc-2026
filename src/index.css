@@ -2,9 +2,9 @@
 
 :root {
   /* Color Palette (FIFA World Cup 2026 Brand) */
-  --bg-deep: #111326;
-  --bg-card: rgba(22, 25, 48, 0.7);
-  --bg-card-hover: rgba(32, 36, 68, 0.85);
+  --bg-deep: #171a30;
+  --bg-card: rgba(20, 23, 44, 0.58);
+  --bg-card-hover: rgba(36, 40, 74, 0.78);
   
   --primary: #10b981; /* Electric Emerald */
   --primary-glow: rgba(16, 185, 129, 0.4);
@@ -56,10 +56,11 @@ body {
   overflow-x: hidden;
   position: relative;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.22) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.17) 0%, transparent 40%);
+    linear-gradient(180deg, rgba(12, 14, 27, 0.28), rgba(12, 14, 27, 0.48)),
+    radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.11) 0%, transparent 40%);
   background-attachment: fixed;
-  padding-bottom: 84px; /* Space for bottom nav bar */
+  padding-bottom: 112px; /* Space for taller bottom nav bar */
 }
 
 h1, h2, h3, h4 {
@@ -123,8 +124,8 @@ h1, h2, h3, h4 {
 /* Glassmorphism Card Style */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-md);
   padding: 20px;
@@ -613,20 +614,21 @@ h1, h2, h3, h4 {
   transform: translateX(-50%);
   width: 100%;
   max-width: 600px;
-  background: rgba(10, 11, 22, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  min-height: 104px;
+  background: rgba(10, 11, 22, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--border-color);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding: 8px 0 24px 0; /* Padding bottom for mobile swipe indicators */
+  padding: 14px 0 28px 0; /* Padding bottom for mobile swipe indicators */
   z-index: 100;
   box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
 }
 
 .nav-item {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -637,16 +639,17 @@ h1, h2, h3, h4 {
   cursor: pointer;
   transition: var(--transition-smooth);
   gap: 4px;
+  min-height: 62px;
 }
 
 .nav-digit {
   position: absolute;
-  top: 40%;
+  top: 42%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
-  width: 68px;
-  height: 52px;
-  opacity: 0.04;
+  width: 82px;
+  height: 62px;
+  opacity: 0.08;
   fill: #ffffff;
   pointer-events: none;
   z-index: 1;
@@ -654,7 +657,7 @@ h1, h2, h3, h4 {
 }
 
 .nav-item:hover .nav-digit {
-  opacity: 0.1;
+  opacity: 0.14;
   transform: translate(-50%, -50%) scale(0.96);
 }
 
@@ -663,7 +666,7 @@ h1, h2, h3, h4 {
 }
 
 .nav-item.active .nav-digit {
-  opacity: 0.18;
+  opacity: 0.26;
   transform: translate(-50%, -50%) scale(1.08);
   animation: digitBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
