@@ -103,6 +103,30 @@ export default function App() {
     });
   };
 
+  // Complete two-way trade: add received, remove duplicates given away
+  const handleCompleteTrade = (receives, gives) => {
+    setStickerCounts(prev => {
+      const nextCounts = { ...prev };
+      
+      // 1. Add stickers received (got from friend)
+      receives.forEach(code => {
+        nextCounts[code] = (nextCounts[code] || 0) + 1;
+      });
+
+      // 2. Remove duplicates given away (gave to friend)
+      gives.forEach(code => {
+        const current = nextCounts[code] || 0;
+        if (current > 1) {
+          nextCounts[code] = current - 1;
+        } else if (current === 1) {
+          delete nextCounts[code];
+        }
+      });
+
+      return nextCounts;
+    });
+  };
+
   // --- STATISTICS CALCULATIONS ---
   const stats = useMemo(() => {
     const total = stickersList.length;
@@ -434,7 +458,7 @@ export default function App() {
           <TradeMatcher
             stickersList={stickersList}
             stickerCounts={stickerCounts}
-            onBulkAdd={handleBulkAdd}
+            onCompleteTrade={handleCompleteTrade}
             showToast={showToast}
           />
         </>

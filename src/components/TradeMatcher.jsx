@@ -1,213 +1,270 @@
 import React, { useState } from 'react';
 import { TEAM_FLAGS } from '../data/stickersData';
 
-export default function TradeMatcher({ stickersList, stickerCounts, onBulkAdd, showToast }) {
+export default function TradeMatcher({ stickersList, stickerCounts, onCompleteTrade, showToast }) {
   const [inputText, setInputText] = useState('');
-  const [matchingStickers, setMatchingStickers] = useState(null);
-  const [selectedCodes, setSelectedCodes] = useState({});
+  const [tradeResults, setTradeResults] = useState(null);
+  const [selectedReceives, setSelectedReceives] = useState({});
+  const [selectedGives, setSelectedGives] = useState({});
 
-  // Clean and parse the shared list from WhatsApp
   const handleCompare = (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    // Get list of valid team IDs (e.g. ["FWC", "ARG", "USA", ...])
     const validTeams = [...new Set(stickersList.map(s => s.teamId))];
-    const uppercaseText = inputText.toUpperCase();
+    const upperText = inputText.toUpperCase();
 
-    // 1. Find all occurrences of valid team IDs to segment the text
-    const matches = [];
-    validTeams.forEach(teamId => {
-      let pos = uppercaseText.indexOf(teamId);
-      while (pos !== -1) {
-        // Confirm it's a word boundary (not part of another word like PORTUGAL containing POR)
-        const charBefore = pos > 0 ? uppercaseText[pos - 1] : ' ';
-        const charAfter = pos + teamId.length < uppercaseText.length ? uppercaseText[pos + teamId.length] : ' ';
-        
-        const isWordBefore = /[A-Z]/.test(charBefore);
-        const isWordAfter = /[A-Z]/.test(charAfter);
+    // Define keywords to identify sections
+    const repeatKeywords = ['REPETIDAS', 'REPES', 'REPETIDAS PARA CAMBIAR', 'TENGO PARA CAMBIAR', 'REPETIDA', 'REPETIDAS:'];
+    const missingKeywords = ['FALTANTES', 'FALTAN', 'NO TENGO', 'BUSCO', 'FALTANTE', 'FALTANTES:'];
 
-        if (!isWordBefore && !isWordAfter) {
-          matches.push({ index: pos, teamId });
-        }
-        pos = uppercaseText.indexOf(teamId, pos + 1);
+    let repeatsIndex = -1;
+    let missingIndex = -1;
+
+    // Find first keyword index
+    for (const kw of repeatKeywords) {
+      const idx = upperText.indexOf(kw);
+      if (idx !== -1) {
+        repeatsIndex = idx;
+        break;
       }
-    });
+    }
 
-    // Sort segments by their appearance index
-    matches.sort((a, b) => a.index - b.index);
-
-    let parsedStickers = [];
-
-    if (matches.length === 0) {
-      // Fallback: search for direct codes (e.g. ARG-10, FWC02)
-      const directRegex = /\b([A-Z]{3})[-\s]?(\d{1,2})\b/gi;
-      let match;
-      const validTeamIds = new Set(validTeams);
-      while ((match = directRegex.exec(inputText)) !== null) {
-        const teamId = match[1].toUpperCase();
-        const num = parseInt(match[2]);
-        if (validTeamIds.has(teamId) && num >= 1 && num <= 20) {
-          parsedStickers.push(`${teamId}-${num.toString().padStart(2, '0')}`);
-        }
+    for (const kw of missingKeywords) {
+      const idx = upperText.indexOf(kw);
+      if (idx !== -1) {
+        missingIndex = idx;
+        break;
       }
+    }
+
+    let repeatsText = '';
+    let missingText = '';
+
+    if (repeatsIndex !== -1 && missingIndex !== -1) {
+      if (repeatsIndex < missingIndex) {
+        repeatsText = inputText.substring(repeatsIndex, missingIndex);
+        missingText = inputText.substring(missingIndex);
+      } else {
+        missingText = inputText.substring(missingIndex, repeatsIndex);
+        repeatsText = inputText.substring(repeatsIndex);
+      }
+    } else if (repeatsIndex !== -1) {
+      repeatsText = inputText;
+    } else if (missingIndex !== -1) {
+      missingText = inputText;
     } else {
-      // Segment parsing: extract numbers associated with each team block
-      for (let i = 0; i < matches.length; i++) {
-        const startIdx = matches[i].index;
-        const endIdx = (i + 1 < matches.length) ? matches[i + 1].index : uppercaseText.length;
-        const segmentText = uppercaseText.substring(startIdx + matches[i].teamId.length, endIdx);
-        const teamId = matches[i].teamId;
+      // Fallback: entire text is treated as repeats list
+      repeatsText = inputText;
+    }
 
-        // Clean segment: remove multipliers like (x2), x3, (3) to avoid parsing them as sticker numbers
-        const cleanSegment = segmentText
-          .replace(/x\s*\d+/gi, '')
-          .replace(/\(\s*\d+\s*\)/g, '');
+    // Helper to extract sticker codes from text block
+    const extractCodes = (textBlock) => {
+      if (!textBlock.trim()) return [];
+      const uppercaseSegment = textBlock.toUpperCase();
+      const matches = [];
 
-        // Find all 1-to-2 digits numbers in the cleaned segment
-        const numberRegex = /\b\d{1,2}\b/g;
-        let numMatch;
-        while ((numMatch = numberRegex.exec(cleanSegment)) !== null) {
-          const numVal = parseInt(numMatch[0]);
-          if (numVal >= 1 && numVal <= 20) {
-            parsedStickers.push(`${teamId}-${numVal.toString().padStart(2, '0')}`);
+      validTeams.forEach(teamId => {
+        let pos = uppercaseSegment.indexOf(teamId);
+        while (pos !== -1) {
+          const charBefore = pos > 0 ? uppercaseSegment[pos - 1] : ' ';
+          const charAfter = pos + teamId.length < uppercaseSegment.length ? uppercaseSegment[pos + teamId.length] : ' ';
+          
+          const isWordBefore = /[A-Z]/.test(charBefore);
+          const isWordAfter = /[A-Z]/.test(charAfter);
+
+          if (!isWordBefore && !isWordAfter) {
+            matches.push({ index: pos, teamId });
+          }
+          pos = uppercaseSegment.indexOf(teamId, pos + 1);
+        }
+      });
+
+      matches.sort((a, b) => a.index - b.index);
+      let parsed = [];
+
+      if (matches.length === 0) {
+        // Direct matching fallback (e.g. ARG-10)
+        const directRegex = /\b([A-Z]{3})[-\s]?(\d{1,2})\b/gi;
+        let match;
+        const validTeamIds = new Set(validTeams);
+        while ((match = directRegex.exec(textBlock)) !== null) {
+          const teamId = match[1].toUpperCase();
+          const num = parseInt(match[2]);
+          if (validTeamIds.has(teamId) && num >= 1 && num <= 20) {
+            parsed.push(`${teamId}-${num.toString().padStart(2, '0')}`);
+          }
+        }
+      } else {
+        for (let i = 0; i < matches.length; i++) {
+          const startIdx = matches[i].index;
+          const endIdx = (i + 1 < matches.length) ? matches[i].index : uppercaseSegment.length;
+          const subText = uppercaseSegment.substring(startIdx + matches[i].teamId.length, endIdx);
+          const teamId = matches[i].teamId;
+
+          // Remove multipliers like x2, (x3), (3)
+          const cleanText = subText
+            .replace(/x\s*\d+/gi, '')
+            .replace(/\(\s*\d+\s*\)/g, '');
+
+          const numberRegex = /\b\d{1,2}\b/g;
+          let numMatch;
+          while ((numMatch = numberRegex.exec(cleanText)) !== null) {
+            const numVal = parseInt(numMatch[0]);
+            if (numVal >= 1 && numVal <= 20) {
+              parsed.push(`${teamId}-${numVal.toString().padStart(2, '0')}`);
+            }
           }
         }
       }
-    }
+      return [...new Set(parsed)];
+    };
 
-    // Make parsed codes unique
-    const uniqueParsed = [...new Set(parsedStickers)];
+    const friendRepeats = extractCodes(repeatsText);
+    const friendMissing = extractCodes(missingText);
 
-    // Filter to find only the ones the user DOES NOT have (count === 0)
-    const needed = uniqueParsed
+    // 1. Receives: Friend has it repeated, user doesn't have it (count === 0)
+    const receives = friendRepeats
       .map(code => stickersList.find(s => s.code === code))
       .filter(s => s && (stickerCounts[s.code] || 0) === 0);
 
-    setMatchingStickers(needed);
+    // 2. Gives: Friend is missing it, user has it repeated (count > 1)
+    const gives = friendMissing
+      .map(code => stickersList.find(s => s.code === code))
+      .filter(s => s && (stickerCounts[s.code] || 0) > 1);
 
-    // Initialize all matching stickers as "selected" (checked)
-    const initialSelected = {};
-    needed.forEach(s => {
-      initialSelected[s.code] = true;
-    });
-    setSelectedCodes(initialSelected);
+    setTradeResults({ receives, gives });
 
-    if (needed.length > 0) {
-      showToast(`¡Encontradas ${needed.length} figuritas que te sirven!`);
-    } else if (uniqueParsed.length > 0) {
-      showToast(`Ninguna de esas figuritas te falta.`);
+    // Default select all
+    const initialReceives = {};
+    receives.forEach(s => { initialReceives[s.code] = true; });
+    setSelectedReceives(initialReceives);
+
+    const initialGives = {};
+    gives.forEach(s => { initialGives[s.code] = true; });
+    setSelectedGives(initialGives);
+
+    if (receives.length > 0 || gives.length > 0) {
+      showToast(`¡Se armó una lista de intercambio!`);
     } else {
-      showToast(`No se reconocieron códigos en el texto.`);
+      showToast(`No encontramos coincidencias para cambiar.`);
     }
   };
 
-  const handleToggleSticker = (code) => {
-    setSelectedCodes(prev => ({
-      ...prev,
-      [code]: !prev[code]
-    }));
+  const handleToggleReceive = (code) => {
+    setSelectedReceives(prev => ({ ...prev, [code]: !prev[code] }));
   };
 
-  const handleAddSelected = () => {
-    const codesToAdd = Object.keys(selectedCodes).filter(code => selectedCodes[code]);
-    if (codesToAdd.length === 0) return;
+  const handleToggleGive = (code) => {
+    setSelectedGives(prev => ({ ...prev, [code]: !prev[code] }));
+  };
 
-    onBulkAdd(codesToAdd);
-    showToast(`¡Se agregaron ${codesToAdd.length} figuritas al álbum!`);
+  const handleExecuteTrade = () => {
+    const receivesToAdd = Object.keys(selectedReceives).filter(code => selectedReceives[code]);
+    const givesToRemove = Object.keys(selectedGives).filter(code => selectedGives[code]);
+
+    if (receivesToAdd.length === 0 && givesToRemove.length === 0) return;
+
+    onCompleteTrade(receivesToAdd, givesToRemove);
+    showToast(`¡Canje completado con éxito!`);
     
-    // Clear results
-    setMatchingStickers(null);
+    // Clear state
+    setTradeResults(null);
     setInputText('');
   };
 
   return (
     <div className="glass-card" style={{ marginTop: '20px' }}>
       <h3 className="quick-add-title">
-        <span>🔄</span> Comparador de Canjes (Trade Matcher)
+        <span>🔄</span> ¡Cambia con tus amigos!
       </h3>
       <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
-        ¿Un amigo te mandó su lista de repetidas? Pégala aquí abajo y analizaremos automáticamente cuáles te faltan a ti.
+        Pega abajo el mensaje completo de tu amigo (con sus repetidas y faltantes) para saber qué se pueden cambiar mutuamente.
       </p>
 
       <form onSubmit={handleCompare} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <textarea
           className="quick-add-input"
-          style={{ minHeight: '100px', resize: 'vertical', fontFamily: 'monospace', fontSize: '0.85rem' }}
-          placeholder="Ej: Hola! Mis repetidas del mundial son:
-• ARG: 02, 10 (x2), 15
-• FWC: 01, 04, 18
-• USA: 05, 12..."
+          style={{ minHeight: '120px', resize: 'vertical', fontFamily: 'monospace', fontSize: '0.85rem' }}
+          placeholder="Pega el mensaje de tu amigo acá...
+Ej:
+MIS REPETIDAS:
+• ARG: 10, 15
+• FWC: 02
+
+MIS FALTANTES:
+• USA: 05, 12"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
         <button type="submit" className="btn btn-secondary" style={{ width: '100%' }}>
-          🔍 Comparar con mi Álbum
+          🔍 Comparar Listas
         </button>
       </form>
 
-      {matchingStickers !== null && (
+      {tradeResults && (
         <div style={{ marginTop: '16px', padding: '16px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-          <h4 style={{ fontSize: '0.95rem', fontFamily: 'var(--font-display)', marginBottom: '8px' }}>
-            Resultados del Cruce:
+          <h4 style={{ fontSize: '0.95rem', fontFamily: 'var(--font-display)', marginBottom: '12px', textAlign: 'center' }}>
+            🤝 Plan de Intercambio Mutuo
           </h4>
 
-          {matchingStickers.length > 0 ? (
-            <>
-              <p style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600, marginBottom: '12px' }}>
-                ✔ ¡Te sirven estas {matchingStickers.length} figuritas! Selecciona las que vas a cambiar:
-              </p>
-              
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', maxHeight: '200px', overflowY: 'auto', marginBottom: '16px', paddingRight: '4px' }}>
-                {matchingStickers.map(s => {
-                  const isChecked = selectedCodes[s.code];
+          {/* Section 1: Receives (Le pides) */}
+          <div style={{ marginBottom: '16px' }}>
+            <h5 style={{ fontSize: '0.82rem', color: 'var(--primary)', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>📥</span> Lo que te sirve de tu amigo (Le pides):
+            </h5>
+            {tradeResults.receives.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', maxHeight: '120px', overflowY: 'auto' }}>
+                {tradeResults.receives.map(s => {
+                  const isChecked = selectedReceives[s.code];
                   return (
-                    <label
-                      key={s.code}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px',
-                        background: isChecked ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                        border: `1px solid ${isChecked ? 'var(--primary)' : 'var(--border-color)'}`,
-                        borderRadius: '8px',
-                        fontSize: '0.78rem',
-                        cursor: 'pointer',
-                        userSelect: 'none',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => handleToggleSticker(s.code)}
-                        style={{ accentColor: 'var(--primary)', cursor: 'pointer' }}
-                      />
-                      <span>{TEAM_FLAGS[s.teamId] || '⚽'}</span>
-                      <strong style={{ color: isChecked ? '#fff' : 'var(--text-secondary)' }}>{s.code}</strong>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        ({s.name})
-                      </span>
+                    <label key={s.code} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px', background: isChecked ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isChecked ? 'var(--primary)' : 'var(--border-color)'}`, borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={isChecked} onChange={() => handleToggleReceive(s.code)} style={{ accentColor: 'var(--primary)' }} />
+                      <span>{TEAM_FLAGS[s.teamId]}</span>
+                      <strong>{s.code}</strong>
                     </label>
                   );
                 })}
               </div>
+            ) : (
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', paddingLeft: '8px' }}>Ninguna (no tiene repes que te sirvan).</p>
+            )}
+          </div>
 
-              <button
-                className="btn btn-success"
-                style={{ width: '100%', padding: '10px' }}
-                onClick={handleAddSelected}
-              >
-                📥 Agregar Seleccionadas a mi Álbum
-              </button>
-            </>
+          {/* Section 2: Gives (Le das) */}
+          <div style={{ marginBottom: '20px' }}>
+            <h5 style={{ fontSize: '0.82rem', color: 'var(--accent-gold)', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>📤</span> Lo que le sirve a tu amigo de tus repes (Le das):
+            </h5>
+            {tradeResults.gives.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px', maxHeight: '120px', overflowY: 'auto' }}>
+                {tradeResults.gives.map(s => {
+                  const isChecked = selectedGives[s.code];
+                  return (
+                    <label key={s.code} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px', background: isChecked ? 'rgba(245, 158, 11, 0.08)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isChecked ? 'var(--accent-gold)' : 'var(--border-color)'}`, borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={isChecked} onChange={() => handleToggleGive(s.code)} style={{ accentColor: 'var(--accent-gold)' }} />
+                      <span>{TEAM_FLAGS[s.teamId]}</span>
+                      <strong>{s.code}</strong>
+                    </label>
+                  );
+                })}
+              </div>
+            ) : (
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', paddingLeft: '8px' }}>Ninguna (no le faltan tus repetidas).</p>
+            )}
+          </div>
+
+          {(tradeResults.receives.length > 0 || tradeResults.gives.length > 0) ? (
+            <button
+              className="btn btn-success"
+              style={{ width: '100%', padding: '12px', fontSize: '0.9rem' }}
+              onClick={handleExecuteTrade}
+            >
+              🤝 Completar Intercambio
+            </button>
           ) : (
-            <div style={{ textAlign: 'center', padding: '12px 0' }}>
-              <span style={{ fontSize: '1.5rem' }}>😢</span>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                No te sirve ninguna de las figuritas pegadas. ¡Ya las tienes todas!
-              </p>
+            <div style={{ textAlign: 'center', padding: '8px 0', color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+              No hay figuritas para intercambiar en este mensaje.
             </div>
           )}
         </div>
