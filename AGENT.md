@@ -26,6 +26,10 @@ App React + Vite para gestionar un album de figuritas del Mundial 2026. El usuar
   - `src/components/SharePanel.jsx`
 - Comparar listas de amigos y completar intercambios:
   - `src/components/TradeMatcher.jsx`
+- Generar QR, escanear QR, pegar codigos QR y completar intercambios desde QR:
+  - `src/components/QrExchange.jsx`
+- Codificacion compacta del QR y comparacion entre repetidas/faltantes:
+  - `src/utils/tradeQr.js`
 - Fondo dinamico con colores por seleccion:
   - `src/components/CountryBackground.jsx`
 - PWA, iconos, manifest y cache offline:
@@ -80,7 +84,7 @@ world_cup_2026_sticker_counts
 
 Estados importantes:
 
-- `activeTab`: pestaña visible (`dashboard`, `album`, `quickadd`, `settings`).
+- `activeTab`: pestaña visible (`dashboard`, `album`, `quickadd`, `qr`, `settings`).
 - `stickerCounts`: cantidades por codigo.
 - `selectedTeam`: seleccion visible en el album.
 - `albumFilter`: filtro de album (`all`, `missing`, `owned`, `repeats`).
@@ -119,6 +123,7 @@ Handlers importantes:
 - Si piden agregar equipos, grupos o cambiar el album completo, empezar por `src/data/stickersData.js`.
 - Si piden cambiar como se calcula el progreso, revisar `stats` y `teamProgress` en `src/App.jsx`.
 - Si piden mejorar canjes, revisar primero `TradeMatcher.jsx`; su parser esta dentro de `handleCompare`.
+- Si piden mejorar canjes por QR, revisar primero `QrExchange.jsx`; si el cambio es del formato del codigo, revisar `src/utils/tradeQr.js`.
 - Si piden mejorar el texto compartido, revisar `SharePanel.jsx`.
 - Si piden mejorar instalacion/offline/PWA, revisar `public/manifest.json`, `public/sw.js` e `index.html`.
 - Si piden mejorar apariencia, revisar `src/index.css` y luego los estilos inline del componente afectado.

@@ -12,6 +12,8 @@ App web para llevar el control de un album de figuritas del Mundial 2026. Esta p
 - Permite cargar muchas figuritas juntas pegando codigos como `ARG-10, FWC-00, USA-12`.
 - Genera texto de faltantes y repetidas para copiar o compartir por WhatsApp.
 - Compara listas de otra persona para encontrar intercambios posibles.
+- Genera codigos QR compactos con repetidas y faltantes para canjes presenciales.
+- Permite escanear o pegar un codigo QR de otra persona para calcular cambios.
 - Guarda el progreso en `localStorage`.
 - Permite exportar, importar y reiniciar el respaldo del album.
 - Incluye manifest y service worker basicos para uso tipo PWA.
@@ -20,6 +22,7 @@ App web para llevar el control de un album de figuritas del Mundial 2026. Esta p
 
 - React 19
 - Vite 8
+- qrcode para generar codigos QR
 - CSS propio en `src/index.css`
 - ESLint
 - Deploy opcional con `gh-pages`
@@ -57,7 +60,10 @@ src/
     QuickAdd.jsx                  # Carga masiva por codigos
     SharePanel.jsx                # Texto para copiar/WhatsApp
     TradeMatcher.jsx              # Comparador de listas para canjes
+    QrExchange.jsx                # Generacion y lectura de QR para canjes
     CountryBackground.jsx         # Fondo dinamico por seleccion
+  utils/
+    tradeQr.js                    # Codificacion compacta y comparacion de QR
 public/
   manifest.json                   # Configuracion PWA
   sw.js                           # Service worker simple
@@ -96,6 +102,7 @@ La navegacion inferior tiene cuatro secciones:
 - **Progreso**: resumen del album y panel para compartir listas.
 - **Album**: busqueda, filtros, selector de seleccion y grilla de figuritas.
 - **Canjes**: carga masiva y comparador de listas de intercambio.
+- **QR**: generador y lector de codigos QR de canje.
 - **Ajustes**: exportar, importar o borrar el progreso.
 
 `App.jsx` concentra el estado compartido (`stickerCounts`, filtros, busqueda, tab activo y toasts) y pasa los handlers necesarios a los componentes.
@@ -104,6 +111,7 @@ La navegacion inferior tiene cuatro secciones:
 
 - Antes de tocar logica de figuritas, revisar `src/data/stickersData.js` y los calculos derivados en `src/App.jsx`.
 - Antes de tocar estilos o layout, revisar `src/index.css`; casi todos los estilos viven ahi.
+- Antes de tocar canjes por QR, revisar `src/components/QrExchange.jsx` y `src/utils/tradeQr.js`.
 - La app usa varios textos e iconos inline dentro de componentes, especialmente en `App.jsx`, `QuickAdd.jsx`, `SharePanel.jsx` y `TradeMatcher.jsx`.
 - El service worker cachea solo assets basicos. Si se agregan recursos importantes para offline, actualizar `public/sw.js`.
 - El README describe la app actual; si cambia el flujo principal, actualizar tambien `AGENT.md`.

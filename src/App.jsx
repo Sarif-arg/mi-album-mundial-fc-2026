@@ -5,12 +5,13 @@ import StickerCard from './components/StickerCard';
 import QuickAdd from './components/QuickAdd';
 import SharePanel from './components/SharePanel';
 import TradeMatcher from './components/TradeMatcher';
+import QrExchange from './components/QrExchange';
 import CountryBackground from './components/CountryBackground';
 import logoSvg from './assets/2026_FIFA_World_Cup_emblem.svg';
 import './App.css'; // Just in case, although styling is mainly in index.css
 
 export default function App() {
-  // Navigation tabs: 'dashboard', 'album', 'quickadd', 'settings'
+  // Navigation tabs: 'dashboard', 'album', 'quickadd', 'qr', 'settings'
   const [activeTab, setActiveTab] = useState('dashboard');
   
   // Stickers database list (constant)
@@ -464,6 +465,15 @@ export default function App() {
         </>
       )}
 
+      {activeTab === 'qr' && (
+        <QrExchange
+          stickersList={stickersList}
+          stickerCounts={stickerCounts}
+          onCompleteTrade={handleCompleteTrade}
+          showToast={showToast}
+        />
+      )}
+
       {activeTab === 'settings' && (
         <div className="glass-card share-section">
           <h3 style={{ fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -556,6 +566,15 @@ export default function App() {
           <Digit2Svg />
           <CanjesIcon />
           <span className="nav-label">Canjes</span>
+        </button>
+
+        <button 
+          className={`nav-item ${activeTab === 'qr' ? 'active' : ''}`}
+          onClick={() => setActiveTab('qr')}
+        >
+          <Digit6Svg />
+          <img src={logoSvg} alt="" className="nav-icon nav-logo-icon" />
+          <span className="nav-label">QR</span>
         </button>
 
         <button 
