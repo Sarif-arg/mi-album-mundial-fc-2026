@@ -5,6 +5,7 @@ import StickerCard from './components/StickerCard';
 import QuickAdd from './components/QuickAdd';
 import SharePanel from './components/SharePanel';
 import TradeMatcher from './components/TradeMatcher';
+import CountryBackground from './components/CountryBackground';
 import './App.css'; // Just in case, although styling is mainly in index.css
 
 export default function App() {
@@ -237,6 +238,9 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Dynamic Background Watermark */}
+      <CountryBackground teamId={activeTab === 'album' ? selectedTeam : 'FWC'} />
+
       {/* Toast Alert */}
       {toast && <div className="toast-msg">{toast}</div>}
 

@@ -5,90 +5,115 @@ export const GROUPS = {
       { id: "FWC", name: "FIFA World Cup", short: "FWC" }
     ]
   },
-  "HOST": {
-    name: "Anfitriones",
+  "A": {
+    name: "Grupo A",
+    teams: [
+      { id: "MEX", name: "México", short: "MEX" },
+      { id: "RSA", name: "Sudáfrica", short: "RSA" },
+      { id: "KOR", name: "República de Corea", short: "KOR" },
+      { id: "CZE", name: "República Checa", short: "CZE" }
+    ]
+  },
+  "B": {
+    name: "Grupo B",
     teams: [
       { id: "CAN", name: "Canadá", short: "CAN" },
-      { id: "MEX", name: "México", short: "MEX" },
-      { id: "USA", name: "Estados Unidos", short: "USA" }
-    ]
-  },
-  "AFC": {
-    name: "AFC (Asia)",
-    teams: [
-      { id: "AUS", name: "Australia", short: "AUS" },
-      { id: "IRN", name: "RI de Irán", short: "IRN" },
-      { id: "JPN", name: "Japón", short: "JPN" },
-      { id: "JOR", name: "Jordania", short: "JOR" },
-      { id: "KOR", name: "República de Corea", short: "KOR" },
+      { id: "BIH", name: "Bosnia y Herzegovina", short: "BIH" },
       { id: "QAT", name: "Catar", short: "QAT" },
-      { id: "KSA", name: "Arabia Saudí", short: "KSA" },
-      { id: "UZB", name: "Uzbekistán", short: "UZB" },
-      { id: "IRQ", name: "Irak", short: "IRQ" }
+      { id: "SUI", name: "Suiza", short: "SUI" }
     ]
   },
-  "CAF": {
-    name: "CAF (África)",
+  "C": {
+    name: "Grupo C",
     teams: [
-      { id: "ALG", name: "Argelia", short: "ALG" },
-      { id: "CPV", name: "Cabo Verde", short: "CPV" },
-      { id: "CIV", name: "Costa de Marfil", short: "CIV" },
-      { id: "EGY", name: "Egipto", short: "EGY" },
-      { id: "GHA", name: "Ghana", short: "GHA" },
-      { id: "MAR", name: "Marruecos", short: "MAR" },
-      { id: "SEN", name: "Senegal", short: "SEN" },
-      { id: "RSA", name: "Sudáfrica", short: "RSA" },
-      { id: "TUN", name: "Túnez", short: "TUN" },
-      { id: "COD", name: "RD Congo", short: "COD" }
-    ]
-  },
-  "CONCACAF": {
-    name: "CONCACAF",
-    teams: [
-      { id: "CUW", name: "Curazao", short: "CUW" },
-      { id: "HAI", name: "Haití", short: "HAI" },
-      { id: "PAN", name: "Panamá", short: "PAN" }
-    ]
-  },
-  "CONMEBOL": {
-    name: "CONMEBOL",
-    teams: [
-      { id: "ARG", name: "Argentina", short: "ARG" },
       { id: "BRA", name: "Brasil", short: "BRA" },
-      { id: "COL", name: "Colombia", short: "COL" },
-      { id: "ECU", name: "Ecuador", short: "ECU" },
-      { id: "PAR", name: "Paraguay", short: "PAR" },
-      { id: "URU", name: "Uruguay", short: "URU" }
+      { id: "MAR", name: "Marruecos", short: "MAR" },
+      { id: "HAI", name: "Haití", short: "HAI" },
+      { id: "SCO", name: "Escocia", short: "SCO" }
     ]
   },
-  "OFC": {
-    name: "OFC (Oceanía)",
+  "D": {
+    name: "Grupo D",
     teams: [
+      { id: "USA", name: "Estados Unidos", short: "USA" },
+      { id: "PAR", name: "Paraguay", short: "PAR" },
+      { id: "AUS", name: "Australia", short: "AUS" },
+      { id: "TUR", name: "Turquía", short: "TUR" }
+    ]
+  },
+  "E": {
+    name: "Grupo E",
+    teams: [
+      { id: "GER", name: "Alemania", short: "GER" },
+      { id: "CUW", name: "Curazao", short: "CUW" },
+      { id: "CIV", name: "Costa de Marfil", short: "CIV" },
+      { id: "ECU", name: "Ecuador", short: "ECU" }
+    ]
+  },
+  "F": {
+    name: "Grupo F",
+    teams: [
+      { id: "NED", name: "Países Bajos", short: "NED" },
+      { id: "JPN", name: "Japón", short: "JPN" },
+      { id: "SWE", name: "Suecia", short: "SWE" },
+      { id: "TUN", name: "Túnez", short: "TUN" }
+    ]
+  },
+  "G": {
+    name: "Grupo G",
+    teams: [
+      { id: "BEL", name: "Bélgica", short: "BEL" },
+      { id: "EGY", name: "Egipto", short: "EGY" },
+      { id: "IRN", name: "RI de Irán", short: "IRN" },
       { id: "NZL", name: "Nueva Zelanda", short: "NZL" }
     ]
   },
-  "UEFA": {
-    name: "UEFA (Europa)",
+  "H": {
+    name: "Grupo H",
     teams: [
-      { id: "AUT", name: "Austria", short: "AUT" },
-      { id: "BEL", name: "Bélgica", short: "BEL" },
-      { id: "BIH", name: "Bosnia y Herzegovina", short: "BIH" },
-      { id: "CRO", name: "Croacia", short: "CRO" },
-      { id: "CZE", name: "República Checa", short: "CZE" },
-      { id: "ENG", name: "Inglaterra", short: "ENG" },
-      { id: "FRA", name: "Francia", short: "FRA" },
-      { id: "GER", name: "Alemania", short: "GER" },
-      { id: "NED", name: "Países Bajos", short: "NED" },
-      { id: "NOR", name: "Noruega", short: "NOR" },
-      { id: "POR", name: "Portugal", short: "POR" },
-      { id: "SCO", name: "Escocia", short: "SCO" },
       { id: "ESP", name: "España", short: "ESP" },
-      { id: "SWE", name: "Suecia", short: "SWE" },
-      { id: "SUI", name: "Suiza", short: "SUI" },
-      { id: "TUR", name: "Turquía", short: "TUR" }
+      { id: "CPV", name: "Cabo Verde", short: "CPV" },
+      { id: "KSA", name: "Arabia Saudí", short: "KSA" },
+      { id: "URU", name: "Uruguay", short: "URU" }
+    ]
+  },
+  "I": {
+    name: "Grupo I",
+    teams: [
+      { id: "FRA", name: "Francia", short: "FRA" },
+      { id: "SEN", name: "Senegal", short: "SEN" },
+      { id: "IRQ", name: "Irak", short: "IRQ" },
+      { id: "NOR", name: "Noruega", short: "NOR" }
+    ]
+  },
+  "J": {
+    name: "Grupo J",
+    teams: [
+      { id: "ARG", name: "Argentina", short: "ARG" },
+      { id: "ALG", name: "Argelia", short: "ALG" },
+      { id: "AUT", name: "Austria", short: "AUT" },
+      { id: "JOR", name: "Jordania", short: "JOR" }
+    ]
+  },
+  "K": {
+    name: "Grupo K",
+    teams: [
+      { id: "POR", name: "Portugal", short: "POR" },
+      { id: "COD", name: "RD Congo", short: "COD" },
+      { id: "UZB", name: "Uzbekistán", short: "UZB" },
+      { id: "COL", name: "Colombia", short: "COL" }
+    ]
+  },
+  "L": {
+    name: "Grupo L",
+    teams: [
+      { id: "ENG", name: "Inglaterra", short: "ENG" },
+      { id: "CRO", name: "Croacia", short: "CRO" },
+      { id: "GHA", name: "Ghana", short: "GHA" },
+      { id: "PAN", name: "Panamá", short: "PAN" }
     ]
   }
-};
+};;
 
 export const TEAM_FLAGS = {
   // Hosts
