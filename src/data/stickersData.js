@@ -150,18 +150,30 @@ export const generateStickersList = () => {
     });
   }
 
-  // Groups and Teams (organized by confederations)
+  // Groups and Teams
   Object.keys(GROUPS).forEach(groupKey => {
     if (groupKey === "FWC") return;
     GROUPS[groupKey].teams.forEach(team => {
       for (let i = 1; i <= 20; i++) {
         const codeNum = i.toString().padStart(2, "0");
         const code = `${team.id}-${codeNum}`;
+        
+        let stickerName = "";
+        if (i === 1) {
+          stickerName = "Escudo";
+        } else if (i === 13) {
+          stickerName = "Formación";
+        } else if (i < 13) {
+          stickerName = `Jugador ${i - 1}`;
+        } else {
+          stickerName = `Jugador ${i - 2}`;
+        }
+
         stickers.push({
           code,
           teamId: team.id,
           teamName: team.name,
-          name: i === 1 ? "Escudo" : `Jugador ${i - 1}`,
+          name: stickerName,
           isSpecial: i === 1 // Escudo is holographic
         });
       }

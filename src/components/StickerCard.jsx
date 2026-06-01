@@ -36,7 +36,7 @@ export default function StickerCard({ sticker, count, onIncrement, onDecrement }
             textTransform: 'uppercase'
           }}
         >
-          ★ Especial
+          {sticker.teamId === 'FWC' ? '★ Especial' : '★ Escudo'}
         </span>
       )}
 

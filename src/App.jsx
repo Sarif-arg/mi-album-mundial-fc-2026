@@ -6,6 +6,7 @@ import QuickAdd from './components/QuickAdd';
 import SharePanel from './components/SharePanel';
 import TradeMatcher from './components/TradeMatcher';
 import CountryBackground from './components/CountryBackground';
+import logoSvg from './assets/2026_FIFA_World_Cup_emblem.svg';
 import './App.css'; // Just in case, although styling is mainly in index.css
 
 export default function App() {
@@ -247,7 +248,16 @@ export default function App() {
       {/* App Header */}
       <header className="app-header">
         <div className="logo-container">
-          <div className="logo-badge">🏆</div>
+          <img 
+            src={logoSvg} 
+            alt="Logo Mundial 2026" 
+            style={{ 
+              width: '42px', 
+              height: '42px', 
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 2px 8px rgba(168, 85, 247, 0.5))'
+            }} 
+          />
           <div>
             <h1 className="logo-text">MI ÁLBUM</h1>
             <span style={{ fontSize: '0.68rem', letterSpacing: '0.1em', color: 'var(--text-secondary)' }}>
