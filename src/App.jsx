@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { generateStickersList, GROUPS, TEAM_FLAGS } from './data/stickersData';
 import Dashboard from './components/Dashboard';
 import StickerCard from './components/StickerCard';
@@ -6,15 +6,35 @@ import QuickAdd from './components/QuickAdd';
 import SharePanel from './components/SharePanel';
 import TradeMatcher from './components/TradeMatcher';
 import CountryBackground from './components/CountryBackground';
+import QRShare from './components/QRShare';
+import { decompressStickerCounts } from './utils/qrUtils';
 import logoSvg from './assets/2026_FIFA_World_Cup_emblem.svg';
 import './App.css'; // Just in case, although styling is mainly in index.css
 
 export default function App() {
-  // Navigation tabs: 'dashboard', 'album', 'quickadd', 'settings'
-  const [activeTab, setActiveTab] = useState('dashboard');
-  
-  // Stickers database list (constant)
+  // stickersList memoized
   const stickersList = useMemo(() => generateStickersList(), []);
+
+  // Initialize friendCounts directly from URL to avoid effect warnings
+  const [friendCounts, setFriendCounts] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const shareData = params.get('share');
+    if (shareData) {
+      try {
+        const list = generateStickersList();
+        return decompressStickerCounts(shareData, list);
+      } catch (e) {
+        console.error('Error parsing shared QR data', e);
+      }
+    }
+    return null;
+  });
+
+  // Navigation tabs: 'dashboard', 'album', 'qr', 'quickadd', 'settings'
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.has('share') ? 'qr' : 'dashboard';
+  });
 
   // Sticker counts state: { [stickerCode]: count }
   const [stickerCounts, setStickerCounts] = useState(() => {
@@ -39,6 +59,29 @@ export default function App() {
   // Toast notification state
   const [toast, setToast] = useState(null);
 
+  // Show a welcome toast if loaded with friend collection
+  useEffect(() => {
+    if (friendCounts) {
+      // Small timeout to let App render and styles load
+      const t = setTimeout(() => {
+        setToast('¡Datos de tu amigo cargados! Comparando...');
+      }, 100);
+      return () => clearTimeout(t);
+    }
+  }, [friendCounts]);
+
+  const handleClearComparison = () => {
+    setFriendCounts(null);
+    window.history.replaceState({}, document.title, window.location.pathname);
+    showToast('Comparación cancelada.');
+  };
+
+  const handleCompleteQRTrade = (receives, gives) => {
+    handleCompleteTrade(receives, gives);
+    setFriendCounts(null);
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setActiveTab('dashboard'); // go back to dashboard
+  };
   // Save progress to localStorage on any state change
   useEffect(() => {
     localStorage.setItem('world_cup_2026_sticker_counts', JSON.stringify(stickerCounts));
@@ -246,7 +289,7 @@ export default function App() {
         } else {
           showToast('Formato de archivo inválido.');
         }
-      } catch (err) {
+      } catch {
         showToast('Error al leer el archivo JSON.');
       }
     };
@@ -447,6 +490,18 @@ export default function App() {
         </div>
       )}
 
+      {activeTab === 'qr' && (
+        <QRShare
+          stickersList={stickersList}
+          stickerCounts={stickerCounts}
+          friendCounts={friendCounts}
+          onClearComparison={handleClearComparison}
+          onCompleteTrade={handleCompleteQRTrade}
+          onFriendScanned={setFriendCounts}
+          showToast={showToast}
+        />
+      )}
+
       {activeTab === 'quickadd' && (
         <>
           <QuickAdd 
@@ -530,7 +585,32 @@ export default function App() {
       )}
 
       {/* BOTTOM NAV BAR */}
-      <nav className="bottom-nav">
+      <nav 
+        className="bottom-nav"
+        style={{
+          '--active-index': {
+            dashboard: 0,
+            album: 1,
+            qr: 2,
+            quickadd: 3,
+            settings: 4,
+          }[activeTab],
+          '--active-color': {
+            dashboard: 'var(--primary)',
+            album: 'var(--secondary)',
+            qr: 'var(--accent-gold)',
+            quickadd: 'var(--accent-cyan)',
+            settings: 'var(--accent-pink)',
+          }[activeTab],
+          '--active-glow-color': {
+            dashboard: 'var(--primary-glow)',
+            album: 'var(--secondary-glow)',
+            qr: 'rgba(245, 158, 11, 0.6)',
+            quickadd: 'rgba(6, 182, 212, 0.6)',
+            settings: 'rgba(236, 72, 153, 0.6)',
+          }[activeTab]
+        }}
+      >
         <button 
           className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('dashboard')}
@@ -550,6 +630,18 @@ export default function App() {
         </button>
 
         <button 
+          className={`nav-item ${activeTab === 'qr' ? 'active' : ''}`}
+          onClick={() => setActiveTab('qr')}
+        >
+          <img 
+            src={logoSvg} 
+            className="nav-icon qr-large-icon" 
+            alt="Copa QR" 
+          />
+          <span className="nav-label">Canje QR</span>
+        </button>
+
+        <button 
           className={`nav-item ${activeTab === 'quickadd' ? 'active' : ''}`}
           onClick={() => setActiveTab('quickadd')}
         >
@@ -566,6 +658,9 @@ export default function App() {
           <SettingsIcon />
           <span className="nav-label">Ajustes</span>
         </button>
+
+        {/* Moving spotlight and light indicator */}
+        <div className="nav-light-indicator" />
       </nav>
     </div>
   );

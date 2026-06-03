@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function StickerCard({ sticker, count, onIncrement, onDecrement }) {
   const isOwned = count > 0;

@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Dashboard({ totalStickers, ownedUnique, totalDuplicates, missingCount }) {
   const percentage = totalStickers > 0 ? Math.round((ownedUnique / totalStickers) * 100) : 0;

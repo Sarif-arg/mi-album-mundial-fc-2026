@@ -158,7 +158,7 @@ export const generateStickersList = () => {
         const codeNum = i.toString().padStart(2, "0");
         const code = `${team.id}-${codeNum}`;
         
-        let stickerName = "";
+        let stickerName;
         if (i === 1) {
           stickerName = "Escudo";
         } else if (i === 13) {

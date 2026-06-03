@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function SharePanel({ stickersList, stickerCounts, showToast }) {
   
@@ -101,7 +100,7 @@ export default function SharePanel({ stickersList, stickerCounts, showToast }) {
           📋 Copiar Texto
         </button>
         <button className="btn btn-success" style={{ flex: 1 }} onClick={handleWhatsApp}>
-          💬 WhatsApp
+          <i className="fa-brands fa-whatsapp" style={{ fontSize: '1.2rem' }}></i> WhatsApp
         </button>
       </div>
     </div>

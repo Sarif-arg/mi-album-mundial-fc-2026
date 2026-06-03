@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TEAM_FLAGS } from '../data/stickersData';
 
 export default function TradeMatcher({ stickersList, stickerCounts, onCompleteTrade, showToast }) {

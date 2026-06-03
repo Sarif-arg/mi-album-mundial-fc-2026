@@ -1,6 +1,4 @@
-import React from 'react';
-
-export const COUNTRY_COLORS = {
+const COUNTRY_COLORS = {
   MEX: ["#ffffff", "#e81602", "#00ad54", "#aed600", "#ffd8be"],
   RSA: ["#ffffff", "#4c1d95", "#e81602", "#86efac", "#00ad54"],
   KOR: ["#ffffff", "#e81602", "#1d4ed8", "#aed600", "#fbbf24"],
@@ -64,7 +62,7 @@ export default function CountryBackground({ teamId }) {
         width: '100vw',
         height: '100vh',
         zIndex: -2,
-        opacity: 0.14,
+        opacity: 0.65,
         pointerEvents: 'none',
         overflow: 'hidden',
         display: 'flex',
